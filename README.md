@@ -17,13 +17,13 @@ Do you have a weird/obscure early 8" floppy disk containing old microcode for a 
 * Encoding is FM
 * The disk spins at 90 rpm *counterclockwise* (normal 8" disks spin clockwise)
 
-The sector format depends on the device that contains the Minnow drive. The System 370 Model 135 has a format documented on page 336 of the [Processing Unit Theory-Maintenance (October 1971)](http://www.bitsavers.org/pdf/ibm/370/fe/3145/SY24-3581-1_3145_Processing_Unit_Theory-Maintenance_Oct71.pdf). needs link. The raw data is placed on the disk very much like asynchronous UART data, with a start bit, data byte, and parity bit. 
+The sector format depends on the device that contains the Minnow drive. The System 370 Model 135 has a format documented on page 336 of the [Processing Unit Theory-Maintenance (October 1971)](http://www.bitsavers.org/pdf/ibm/370/fe/3145/SY24-3581-1_3145_Processing_Unit_Theory-Maintenance_Oct71.pdf). The raw data is placed on the disk very much like asynchronous UART data, with a start bit, data byte, and parity bit. 
 
 The 3830 sector format is different, and documented starting on page 99 of the [MLM for the 3830](http://www.bitsavers.org/pdf/ibm/3830/3830-2_MLM_Vol_R02_Mar1976.pdf).
 
 ## The Disk
 
-Someone loaned me an original Minnow disk, meant for the System 370 Model 135. The disk lable reads as follows:
+Someone loaned me an original Minnow disk, meant for the System 370 Model 135. The disk label reads as follows:
 
 ```
 IMPL DISK                 ID 434839001917
@@ -74,5 +74,5 @@ This is basically where I stopped. If someone is interested in taking this proje
 
 ## License Information
 
-This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit [http://creativecommons.org/licenses/by-sa/4.0/](http://creativecommons.org/license/by-sa/4.0/) or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit [http://creativecommons.org/licenses/by-sa/4.0/](http://creativecommons.org/licenses/by-sa/4.0/) or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
