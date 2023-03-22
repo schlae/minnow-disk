@@ -1,6 +1,6 @@
 # Reverse Engineered 23FD (Minnow) Microcode Disk
 
-Do you have a weird/obscure early 8" floppy disk containing old microcode for a System 370 Model 135 or IBM 3830 mass storage system? Then read on...
+Do you have a weird/obscure early 8" floppy disk containing old microcode for a System 370 Model 135, 145, or IBM 3830 mass storage system? Then read on...
 
 
 ## Documented Minnow Information
@@ -17,7 +17,11 @@ Do you have a weird/obscure early 8" floppy disk containing old microcode for a 
 * Encoding is FM
 * The disk spins at 90 rpm *counterclockwise* (normal 8" disks spin clockwise)
 
-The sector format depends on the device that contains the Minnow drive. The System 370 Model 135 has a format documented on page 336 of the [Processing Unit Theory-Maintenance (October 1971)](http://www.bitsavers.org/pdf/ibm/370/fe/3145/SY24-3581-1_3145_Processing_Unit_Theory-Maintenance_Oct71.pdf). The raw data is placed on the disk very much like asynchronous UART data, with a start bit, data byte, and parity bit. 
+The sector format depends on the device that contains the Minnow drive. 
+
+The System 370 Model 135 was the first to use the Minnow drive. Unfortunately, I do not have any documentation on this format.
+
+The System 370 Model 145 has a format documented on page 336 of the [Processing Unit Theory-Maintenance (October 1971)](http://www.bitsavers.org/pdf/ibm/370/fe/3145/SY24-3581-1_3145_Processing_Unit_Theory-Maintenance_Oct71.pdf). The raw data is placed on the disk very much like asynchronous UART data, with a start bit, data byte, and parity bit.
 
 The 3830 sector format is different, and documented starting on page 99 of the [MLM for the 3830](http://www.bitsavers.org/pdf/ibm/3830/3830-2_MLM_Vol_R02_Mar1976.pdf).
 
@@ -65,12 +69,14 @@ Data analysis was done using a quick-and-dirty Python program (included in this 
 1. Parse the input CSV file into a list with the time stamp, data value, and index value.
 2. Using a crude PLL, classify the incoming pulses into long and short pulses. This allows the algorithm to account for variations in the disk speed.
 3. Reverse the order of the classified pulses. This is because the 31SD drive spins clockwise while the Minnow drive spins counterclockwise.
-4. Decode the FM-encoded data back into binary, and attempt to parse sector data according to the IBM documentation for the Model 135.
+4. Decode the FM-encoded data back into binary, and attempt to parse sector data according to the IBM documentation for the Model 145.
 5. Check each sector byte, which contains the track number, with the physical track number.
 
-The Model 135's disk controller design is quite complex. The disk contains commands which are executed by the disk controller similar to how a CPU executes code. Commands can perform diagnostics of the disk controller itself, checking the parity circuitry and the read circuits to verify that they are working correctly before proceeding.
+The Model 145's disk controller design is quite complex. The disk contains commands which are executed by the disk controller similar to how a CPU executes code. Commands can perform diagnostics of the disk controller itself, checking the parity circuitry and the read circuits to verify that they are working correctly before proceeding.
 
-This is basically where I stopped. If someone is interested in taking this project further, the next step would be to implement the emulation of the disk controller and turn the data on the disk into raw microcode. I hope someone finds this useful.
+Unfortunately, the 145's disk format appears to be significantly different from the 135, so I can't use the documentation from the 145 to interpret the data from this disk. There is a chance that the 135 uses a simpler format, but even knowing that fact, the bits will mean very little unless documentation about the 135 surfaces.
+
+This is basically where I stopped. I hope someone finds this useful.
 
 ## License Information
 
