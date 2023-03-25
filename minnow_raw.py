@@ -72,6 +72,7 @@ def ToNum(value):
 # Now turn into 0 and 1
 tdat = ""
 hdat = ""
+sectordat = ""
 i = 0
 sfound = 0
 bcount = 0
@@ -79,7 +80,7 @@ print(len(rawdat))
 while i < (len(rawdat) - 3):
     if rawdat[i] == "x":
         tdat += "SECTORPULSE"
-        sfound = 1
+        sfound = 1  # Trigger the state machine to look at sector data
         hdat = ""
         i += 1
     elif rawdat[i] == "L":
@@ -97,43 +98,39 @@ while i < (len(rawdat) - 3):
         tdat += "ERR"
         i += 1
 
+    # State machine
+    # First state: Found the hardware sector hole, now find the start of the sector
     if (sfound == 1) and (hdat[-17:] == "00000000000000001"):
+        # Print sector data from previous sector
+        if len(sectordat) > 0:
+            print (sectordat)
+            sectordat = ""
         hdat = "1"
         tdat += "\n"
         sfound = 2
         bcount = 0
         print("Sector")
-    if (sfound == 2) and len(hdat) == 10:
+    # Second state: Sector is synced up and we have the first full data byte: the sector ID
+    elif (sfound == 2) and len(hdat) == 10:
         # Found a byte, parse this byte
         es = ""
-#        if hdat[0] != "1":
-#            pbs = "(MSB not 1)"
-#        parity = sum([int(ch) for ch in hdat[1:]])
-#        if parity % 2 != 1:
-#            pbs += " (Parity error) "
-#        print("%d: %s %s" % (bcount, hdat, pbs))
         if bcount == 0:
             hdrbyte = ToNum(hdat)
             es = " - Track %d, Sector %d" % (hdrbyte >> 3, hdrbyte & 0x7)
-        elif bcount == 1:
-            es = " - Command %2X" % (ToNum(hdat))
         else:
             es = " %.2X" % (ToNum(hdat))
         print("%d: %s %s" % (bcount, hdat, es))
         bcount += 1
         hdat = ""
         tdat += "\n"
-        #sfound = 0
+        # sfound = 2 # Print the next byte
         sfound = 3
-#        if bcount > 10:
-#            sfound = 0
-    # Looking for start bit
-    if (sfound == 3) and len(hdat) == 1:
-        if hdat == "1":
-            # Start bit, so do the next byte
-            sfound = 2
-            hdat = "1"
-        else:
-            hdat = ""
-#print (tdat)
+        sectordat = ""
+    # Third state: Sector ID has been printed, just print the rest of the data payload once
+    # we hit the start of the next sector.
+    elif sfound == 3:
+        sectordat += hdat
+        hdat = ""
+        
+
 
