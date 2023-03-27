@@ -121,11 +121,11 @@ while i < (len(rawdat) - 3):
             es = " %.2X" % (ToNum(hdat))
         print("%d: %s %s" % (bcount, hdat, es))
         bcount += 1
-        hdat = ""
         tdat += "\n"
         # sfound = 2 # Print the next byte
         sfound = 3
-        sectordat = ""
+        sectordat = hdat # Include this byte in the raw data to emit
+        hdat = ""
     # Third state: Sector ID has been printed, just print the rest of the data payload once
     # we hit the start of the next sector.
     elif sfound == 3:
